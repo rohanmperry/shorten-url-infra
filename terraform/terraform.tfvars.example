@@ -1,0 +1,9 @@
+aws_region                = "us-east-1"
+project_name              = "shorten-url"
+environment               = "dev"
+owner                     = "your-name"
+vpc_cidr                  = "10.0.0.0/16"
+enable_nat_gateway        = false
+log_retention_days        = 14
+create_short_url_zip_path = "../bin/create_short_url.zip"
+redirect_zip_path         = "../bin/redirect.zip"
