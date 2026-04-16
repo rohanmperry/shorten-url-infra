@@ -32,3 +32,8 @@ output "api_endpoint" {
   description = "API Gateway endpoint URL"
   value       = module.api_gateway.api_endpoint
 }
+
+output "api_id" {
+  description = "API Gateway API ID"
+  value       = module.api_gateway.api_id
+}
