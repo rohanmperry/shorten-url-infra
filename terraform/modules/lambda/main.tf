@@ -101,9 +101,9 @@ data "aws_iam_policy_document" "lambda" {
   }
 
   statement {
-    sid    = "ECRAuthToken"
-    effect = "Allow"
-    actions = ["ecr:GetAuthorizationToken"]
+    sid       = "ECRAuthToken"
+    effect    = "Allow"
+    actions   = ["ecr:GetAuthorizationToken"]
     resources = ["*"]
   }
 
@@ -180,12 +180,12 @@ data "aws_ecr_image" "redirect" {
 
 # Lambda Functions
 resource "aws_lambda_function" "create_short_url" {
-  function_name    = "${local.name_prefix}-create-short-url"
-  role             = aws_iam_role.lambda.arn
-  package_type     = "Image"
-  image_uri        = "${data.aws_ecr_image.create_short_url.registry_id}.dkr.ecr.${var.aws_region}.amazonaws.com/shorten-url/create-short-url@${data.aws_ecr_image.create_short_url.image_digest}"
-  timeout          = 10
-  memory_size      = 128
+  function_name = "${local.name_prefix}-create-short-url"
+  role          = aws_iam_role.lambda.arn
+  package_type  = "Image"
+  image_uri     = "${data.aws_ecr_image.create_short_url.registry_id}.dkr.ecr.${var.aws_region}.amazonaws.com/shorten-url/create-short-url@${data.aws_ecr_image.create_short_url.image_digest}"
+  timeout       = 10
+  memory_size   = 128
 
   vpc_config {
     subnet_ids         = var.private_subnet_ids
@@ -211,12 +211,12 @@ resource "aws_lambda_function" "create_short_url" {
 }
 
 resource "aws_lambda_function" "redirect" {
-  function_name    = "${local.name_prefix}-redirect"
-  role             = aws_iam_role.lambda.arn
-  package_type     = "Image"
-  image_uri        = "${data.aws_ecr_image.redirect.registry_id}.dkr.ecr.${var.aws_region}.amazonaws.com/shorten-url/redirect@${data.aws_ecr_image.redirect.image_digest}"
-  timeout          = 10
-  memory_size      = 128
+  function_name = "${local.name_prefix}-redirect"
+  role          = aws_iam_role.lambda.arn
+  package_type  = "Image"
+  image_uri     = "${data.aws_ecr_image.redirect.registry_id}.dkr.ecr.${var.aws_region}.amazonaws.com/shorten-url/redirect@${data.aws_ecr_image.redirect.image_digest}"
+  timeout       = 10
+  memory_size   = 128
 
   vpc_config {
     subnet_ids         = var.private_subnet_ids
