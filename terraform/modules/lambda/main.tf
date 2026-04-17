@@ -8,6 +8,14 @@ resource "aws_dynamodb_table" "urls" {
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "short_code"
 
+  # The actual expiration date/time of the DB record must be
+  # set during the time of writing. This just enables it
+  # to use it.
+  ttl {
+    attribute_name = "expires_at"
+    enabled        = true
+  }
+
   attribute {
     name = "short_code"
     type = "S"
@@ -187,6 +195,8 @@ resource "aws_lambda_function" "create_short_url" {
   timeout       = 10
   memory_size   = 128
 
+  reserved_concurrent_executions = 2
+
   vpc_config {
     subnet_ids         = var.private_subnet_ids
     security_group_ids = [aws_security_group.lambda.id]
@@ -217,6 +227,8 @@ resource "aws_lambda_function" "redirect" {
   image_uri     = "${data.aws_ecr_image.redirect.registry_id}.dkr.ecr.${var.aws_region}.amazonaws.com/shorten-url/redirect@${data.aws_ecr_image.redirect.image_digest}"
   timeout       = 10
   memory_size   = 128
+
+  reserved_concurrent_executions = 2
 
   vpc_config {
     subnet_ids         = var.private_subnet_ids
