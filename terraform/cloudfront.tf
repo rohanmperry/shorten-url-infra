@@ -18,8 +18,9 @@ resource "aws_cloudfront_distribution" "short_url" {
   }
 
   origin {
-    origin_id   = "api-gateway"
-    domain_name = replace(module.api_gateway.api_endpoint, "https://", "")
+    origin_id = "api-gateway"
+    # Remove the 'https://' from front and '/' from end of the api_endpoint string.
+    domain_name = trimsuffix(trimprefix(module.api_gateway.api_endpoint, "https://"), "/")
     custom_origin_config {
       http_port              = 80
       https_port             = 443
