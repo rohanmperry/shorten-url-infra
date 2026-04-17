@@ -2,9 +2,7 @@ locals {
   name_prefix = "${var.project_name}-${var.environment}"
 }
 
-# -------------------------------------------------------
 # HTTP API
-# -------------------------------------------------------
 resource "aws_apigatewayv2_api" "main" {
   name          = "${local.name_prefix}-api"
   protocol_type = "HTTP"
@@ -22,9 +20,7 @@ resource "aws_apigatewayv2_api" "main" {
   }
 }
 
-# -------------------------------------------------------
 # API Stage — auto deploy enabled
-# -------------------------------------------------------
 resource "aws_apigatewayv2_stage" "default" {
   api_id      = aws_apigatewayv2_api.main.id
   name        = "$default"
@@ -45,14 +41,17 @@ resource "aws_apigatewayv2_stage" "default" {
     })
   }
 
+  default_route_settings {
+    throttling_burst_limit = 5
+    throttling_rate_limit  = 2
+  }
+
   tags = {
     Name = "${local.name_prefix}-api-stage"
   }
 }
 
-# -------------------------------------------------------
 # CloudWatch Log Group for API Gateway
-# -------------------------------------------------------
 resource "aws_cloudwatch_log_group" "api_gateway" {
   name              = "/aws/apigateway/${local.name_prefix}"
   retention_in_days = var.log_retention_days
@@ -62,9 +61,7 @@ resource "aws_cloudwatch_log_group" "api_gateway" {
   }
 }
 
-# -------------------------------------------------------
 # Lambda Integrations
-# -------------------------------------------------------
 resource "aws_apigatewayv2_integration" "create_short_url" {
   api_id                 = aws_apigatewayv2_api.main.id
   integration_type       = "AWS_PROXY"
@@ -79,9 +76,7 @@ resource "aws_apigatewayv2_integration" "redirect" {
   payload_format_version = "2.0"
 }
 
-# -------------------------------------------------------
 # Routes
-# -------------------------------------------------------
 resource "aws_apigatewayv2_route" "create_short_url" {
   api_id    = aws_apigatewayv2_api.main.id
   route_key = "POST /shorten"
@@ -94,9 +89,7 @@ resource "aws_apigatewayv2_route" "redirect" {
   target    = "integrations/${aws_apigatewayv2_integration.redirect.id}"
 }
 
-# -------------------------------------------------------
 # Lambda Permissions — allow API Gateway to invoke Lambdas
-# -------------------------------------------------------
 resource "aws_lambda_permission" "create_short_url" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"

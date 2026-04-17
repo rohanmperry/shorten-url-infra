@@ -56,8 +56,12 @@ jobs:
         if: ${{ !inputs.apply }}
         run: make plan
         timeout-minutes: 2
+        env:
+          TF_VAR_alert_email: ${{ secrets.ALERT_EMAIL }}
 
       - name: TF Apply
         if: ${{ inputs.apply }}
         run: make apply
-        timeout-minutes: 30
+        timeout-minutes: 10
+        env:
+          TF_VAR_alert_email: ${{ secrets.ALERT_EMAIL }}
