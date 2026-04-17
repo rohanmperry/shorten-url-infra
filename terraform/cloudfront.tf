@@ -29,6 +29,10 @@ resource "aws_cloudfront_distribution" "short_url" {
     }
   }
 
+  # If none of the 'ordered_cache_behavior' patterns match,
+  # use this. The 'ordered_cache_behavior' patterns match in
+  # order, os the order is important.
+  #
   default_cache_behavior {
     target_origin_id       = "s3-frontend"
     viewer_protocol_policy = "redirect-to-https"
@@ -43,21 +47,23 @@ resource "aws_cloudfront_distribution" "short_url" {
     max_ttl     = 86400
   }
 
-  ####
-  ordered_cache_behavior {
-    path_pattern           = "/"
-    target_origin_id       = "s3-frontend"
-    viewer_protocol_policy = "redirect-to-https"
-    allowed_methods        = ["GET", "HEAD"]
-    cached_methods         = ["GET", "HEAD"]
-    forwarded_values {
-      query_string = false
-      cookies { forward = "none" }
-    }
-    min_ttl     = 0
-    default_ttl = 3600
-    max_ttl     = 86400
-  }
+  # This is redundant, because '/' does not match any of the
+  # follong patterns and goes to default above. Kept for
+  # clarity.
+  # ordered_cache_behavior {
+  #   path_pattern           = "/"
+  #   target_origin_id       = "s3-frontend"
+  #   viewer_protocol_policy = "redirect-to-https"
+  #   allowed_methods        = ["GET", "HEAD"]
+  #   cached_methods         = ["GET", "HEAD"]
+  #   forwarded_values {
+  #     query_string = false
+  #     cookies { forward = "none" }
+  #   }
+  #   min_ttl     = 0
+  #   default_ttl = 3600
+  #   max_ttl     = 86400
+  # }
 
   ordered_cache_behavior {
     path_pattern           = "/index.html"
@@ -73,17 +79,29 @@ resource "aws_cloudfront_distribution" "short_url" {
     default_ttl = 3600
     max_ttl     = 86400
   }
-  ####
+
+  # POST /shorten is called by JavaScript fetch() in the browser, not directly
+  # by the browser itself. Typing <domain>/shorten in the browser
+  # sends a GET which API Gateway rejects — this is expected and not a bug.
+  # curl POST <domain>/shorten will also work.
+  #
   ordered_cache_behavior {
     path_pattern           = "/shorten"
     target_origin_id       = "api-gateway"
     viewer_protocol_policy = "redirect-to-https"
-    allowed_methods        = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
-    cached_methods         = ["GET", "HEAD"]
+
+    # All required by CloudFront even if we need only POST and OPTIONS
+    allowed_methods = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+
+    # required by CloudFront even if never used
+    cached_methods = ["GET", "HEAD"]
+
     forwarded_values {
-      query_string = true
+      query_string = false # Uses JSON, not a string
       cookies { forward = "none" }
-      headers = ["Authorization", "Content-Type"]
+      # JavaScript in the browser (or curl) uses this (Content-Type: application/json)
+      # in the POST request to the API GW. So the CF distrib. should pass it.
+      headers = ["Content-Type"]
     }
     min_ttl     = 0
     default_ttl = 0

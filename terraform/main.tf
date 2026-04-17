@@ -36,7 +36,7 @@ module "lambda" {
   # Get the base URL for reporting back the sort URL. Since the base is an alias
   # in the cloudfront distribution, get it from there. In our case, there is only
   # one alias, so this should work.
-  base_url           = "https://${one(aws_cloudfront_distribution.short_url.aliases)}"
+  base_url = "https://${one(aws_cloudfront_distribution.short_url.aliases)}"
 }
 
 module "api_gateway" {
