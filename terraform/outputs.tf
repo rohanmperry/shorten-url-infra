@@ -37,3 +37,8 @@ output "api_id" {
   description = "API Gateway API ID"
   value       = module.api_gateway.api_id
 }
+
+output "cloudfront_domain_name" {
+  description = "CloudFront distribution domain — update CNAME in Namecheap to this"
+  value       = aws_cloudfront_distribution.short_url.domain_name
+}
