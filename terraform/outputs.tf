@@ -39,6 +39,11 @@ output "api_id" {
 }
 
 output "cloudfront_domain_name" {
-  description = "CloudFront distribution domain — update CNAME in Namecheap to this"
+  description = "CloudFront distribution domain — update CNAME in DNS for frontend domain"
   value       = aws_cloudfront_distribution.short_url.domain_name
+}
+
+output "cloudfront_distribution_id" {
+  description = "CloudFront distribution ID"
+  value       = aws_cloudfront_distribution.short_url.id
 }
