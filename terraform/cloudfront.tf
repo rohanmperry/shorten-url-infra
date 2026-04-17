@@ -102,6 +102,21 @@ resource "aws_cloudfront_distribution" "short_url" {
     max_ttl     = 86400
   }
 
+  ordered_cache_behavior {
+    path_pattern           = "/description.html"
+    target_origin_id       = "s3-frontend"
+    viewer_protocol_policy = "redirect-to-https"
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    forwarded_values {
+      query_string = false
+      cookies { forward = "none" }
+    }
+    min_ttl     = 0
+    default_ttl = 3600
+    max_ttl     = 86400
+  }
+
   # POST /shorten is called by JavaScript fetch() in the browser, not directly
   # by the browser itself. Typing <domain>/shorten in the browser
   # sends a GET which API Gateway rejects — this is expected and not a bug.
