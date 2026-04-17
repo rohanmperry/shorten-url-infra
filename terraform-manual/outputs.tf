@@ -7,3 +7,8 @@ output "custom_domain_target" {
   description = "Add this as CNAME target for short.manamperi.com in Namecheap"
   value       = aws_apigatewayv2_domain_name.short_url.domain_name_configuration[0].target_domain_name
 }
+
+output "acm_certificate_arn" {
+  description = "ACM certificate ARN for CloudFront"
+  value       = aws_acm_certificate_validation.short_url.certificate_arn
+}
