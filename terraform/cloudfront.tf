@@ -11,6 +11,13 @@ resource "aws_cloudfront_distribution" "short_url" {
   aliases             = ["short.manamperi.com"]
   price_class         = "PriceClass_100"
 
+  custom_error_response {
+    error_code            = 404
+    response_code         = 404
+    response_page_path    = "/404.html"
+    error_caching_min_ttl = 10
+  }
+
   origin {
     origin_id                = "s3-frontend"
     domain_name              = data.terraform_remote_state.app.outputs.frontend_bucket_regional_domain
