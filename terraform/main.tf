@@ -33,7 +33,10 @@ module "lambda" {
   vpc_id             = module.vpc.vpc_id
   private_subnet_ids = module.vpc.private_subnet_ids
   log_retention_days = var.log_retention_days
-  base_url           = trimsuffix(module.api_gateway.api_endpoint, "/")
+  # Get the base URL for reporting back the sort URL. Since the base is an alias
+  # in the cloudfront distribution, get it from there. In our case, there is only
+  # one alias, so this should work.
+  base_url = "https://${one(aws_cloudfront_distribution.short_url.aliases)}"
 }
 
 module "api_gateway" {
