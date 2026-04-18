@@ -13,6 +13,8 @@ jobs:
   infra-pr:
     name: Infra PR
     uses: ./.github/workflows/infra-change.yaml
+    secrets:
+      ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
     with:
       runs-on: ubuntu-latest
       tf-version: '1.14.8'
