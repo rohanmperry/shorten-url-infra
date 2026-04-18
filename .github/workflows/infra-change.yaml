@@ -59,6 +59,8 @@ jobs:
           else
             echo "TF_VAR_alert_email is set to: $TF_VAR_alert_email"
           fi
+        env:
+          TF_VAR_alert_email: ${{ secrets.ALERT_EMAIL }}
 
       - name: TF Plan
         if: ${{ !inputs.apply }}
