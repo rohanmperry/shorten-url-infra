@@ -52,6 +52,14 @@ jobs:
           make init
           make validate
 
+      - name: Debug Email
+        run: |
+          if [ -z "$TF_VAR_alert_email" ]; then
+            echo "TF_VAR_alert_email is empty!"
+          else
+            echo "TF_VAR_alert_email is set to: $TF_VAR_alert_email"
+          fi
+
       - name: TF Plan
         if: ${{ !inputs.apply }}
         run: make plan
