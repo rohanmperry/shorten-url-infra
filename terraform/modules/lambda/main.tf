@@ -195,7 +195,10 @@ resource "aws_lambda_function" "create_short_url" {
   timeout       = 10
   memory_size   = 128
 
-  reserved_concurrent_executions = 2
+  # Cannnot reserve any concurrency, because the default AWS reserved
+  # amount of 10 does not allow the AWS mandatory unreserved amount
+  # of 10.
+  reserved_concurrent_executions = -1
 
   vpc_config {
     subnet_ids         = var.private_subnet_ids
@@ -228,7 +231,10 @@ resource "aws_lambda_function" "redirect" {
   timeout       = 10
   memory_size   = 128
 
-  reserved_concurrent_executions = 2
+  # Cannnot reserve any concurrency, because the default AWS reserved
+  # amount of 10 does not allow the AWS mandatory unreserved amount
+  # of 10.
+  reserved_concurrent_executions = -1
 
   vpc_config {
     subnet_ids         = var.private_subnet_ids
