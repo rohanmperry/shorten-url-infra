@@ -10,9 +10,9 @@ This project spans three repositories that must be set up in order:
 
 | Order | Repository | Purpose |
 |---|---|---|
-| 1 | [aws-terraform-bootstrap](https://github.com/yourusername/aws-terraform-bootstrap) | Create shared AWS infrastructure (OIDC role, S3 state bucket). Run once locally. |
-| 2 | [shorten-url-app](https://github.com/yourusername/shorten-url-app) | Deploy ECR repositories and push Lambda Docker images. |
-| 3 | [shorten-url-infra](https://github.com/yourusername/shorten-url-infra) | Deploy all AWS infrastructure — VPC, Lambda, API Gateway, CloudFront. |
+| 1 | [aws-terraform-bootstrap](https://github.com/rohanmperry/aws-terraform-bootstrap) | Create shared AWS infrastructure (OIDC role, S3 state bucket). Run once locally. |
+| 2 | [shorten-url-app](https://github.com/rohanmperry/shorten-url-app) | Deploy ECR repositories and push Lambda Docker images. |
+| 3 | [shorten-url-infra](https://github.com/rohanmperry/shorten-url-infra) | Deploy all AWS infrastructure — VPC, Lambda, API Gateway, CloudFront. |
 
 ### First time setup order
 
@@ -139,5 +139,5 @@ This project runs almost entirely within the AWS free tier:
 
 ## Related projects
 
-- [aws-terraform-bootstrap](https://github.com/yourusername/aws-terraform-bootstrap) — Shared AWS bootstrap (OIDC role, S3 state bucket)
-- [shorten-url-app](https://github.com/yourusername/shorten-url-app) — Application code, Docker images, frontend
+- [aws-terraform-bootstrap](https://github.com/rohanmperry/aws-terraform-bootstrap) — Shared AWS bootstrap (OIDC role, S3 state bucket)
+- [shorten-url-app](https://github.com/rohanmperry/shorten-url-app) — Application code, Docker images, frontend
