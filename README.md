@@ -4,6 +4,25 @@ AWS infrastructure for [short.manamperi.com](https://short.manamperi.com) — a 
 URL shortener built as a portfolio project demonstrating a production-grade AWS architecture 
 with full CI/CD.
 
+## Project repositories
+
+This project spans three repositories that must be set up in order:
+
+| Order | Repository | Purpose |
+|---|---|---|
+| 1 | [aws-terraform-bootstrap](https://github.com/yourusername/aws-terraform-bootstrap) | Create shared AWS infrastructure (OIDC role, S3 state bucket). Run once locally. |
+| 2 | [shorten-url-app](https://github.com/yourusername/shorten-url-app) | Deploy ECR repositories and push Lambda Docker images. |
+| 3 | [shorten-url-infra](https://github.com/yourusername/shorten-url-infra) | Deploy all AWS infrastructure — VPC, Lambda, API Gateway, CloudFront. |
+
+### First time setup order
+
+1. Clone and run `aws-terraform-bootstrap` locally — creates the S3 state bucket and OIDC role
+2. Add `AWS_GITHUB_ROLE_ARN` secret to both `shorten-url-app` and `shorten-url-infra` repos
+3. Merge to main in `shorten-url-app` — creates ECR repos and pushes Docker images
+4. Run `terraform-manual/` locally — creates ACM certificate, add CNAMEs to DNS provider
+5. Merge to main in `shorten-url-infra` — deploys all AWS infrastructure
+
+
 ## Live demo
 
 Visit [short.manamperi.com](https://short.manamperi.com) to try it out.
