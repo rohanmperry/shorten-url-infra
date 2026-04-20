@@ -50,6 +50,7 @@ Browser
 | Database | AWS DynamoDB |
 | Networking | AWS VPC, private subnets |
 | Container registry | Amazon ECR |
+| Monitoring | AWS CloudWatch |
 | Infrastructure | Terraform >= 1.14 |
 | State management | S3 with native locking |
 | CI/CD | GitHub Actions with OIDC |
